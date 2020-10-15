@@ -2,8 +2,9 @@ const mongoose = require('mongoose');
 
 
  const menuSchema = mongoose.Schema({
+
 category : String,
-name : {type:String, required: true},
+name : {type: String, required: true},
 price: {type: Number, required: true} ,
 quantity: Number
 });

@@ -5,12 +5,12 @@ const Menu = require('../models/foodMenu');
 
 router.post('/', (req, res)=>{
 const menu = new Menu({
- food_id : req.body.food_id,
+ category : req.body.category,
  name : req.body.name,
  price: req.body.price,
  quantity: req.body.quantity
-})
-food.save().then(result=>{
+});
+menu.save().then(result=>{
     console.log(result)
    })
    .catch(err => console.log(err));
@@ -24,15 +24,19 @@ food.save().then(result=>{
 
 router.get('/', (req, res) =>{
     Menu.find()
-    .select("name price _id")
+    //.select("name price _id")
     .exec()
-    .then(doc =>{
-    const response = {count :doc.length, Menu: doc}
-    if(doc.length >= 0){
+    .then(doc=>{
+        console.log(doc);
+    // const response = {
+    // count :doc.length, 
+    //  menus: doc
+   // }
+    //if(doc.length >= 0){
     res.status(200).json({doc})
-     } else{
-      res.status(404).json({message: 'No entries found'})
-     }
+    // } else{
+   //   res.status(404).json({message: 'No entries found'})
+   //  }
 })
     .catch(err => {console.log(err)
         res.status(201).json({error: err})
