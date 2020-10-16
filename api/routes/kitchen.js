@@ -6,6 +6,7 @@ const Menu = require('../models/foodMenu');
 
 router.post('/', (req, res)=>{
 const menu = new Menu({
+ _id : mongoose.Types.ObjectId(),
  category : req.body.category,
  name : req.body.name,
  price: req.body.price,
@@ -18,7 +19,9 @@ menu.save().then(result=>{
         createdProperty: {
             name: result.name,
             price: result.price,
-           // _id = result._id,
+            quantity: result.quantity,
+            _id : result._id,
+
             request :{
                 type :"GET",
                 url:"http://localhost:5000/kitchen/" + result._id

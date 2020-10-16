@@ -9,6 +9,7 @@ mongoose.connect('mongodb://localhost/Kitchen_DB',  { useNewUrlParser: true, use
 .then(()=> console.log("logged to database"))
 .catch(err => console.error('could not connect to mongo db....', err))
 const kitchenRoute = require('./api/routes/kitchen');
+const orderRoute = require('./api/routes/order')
 
 app.use((req, res, next)=>{
     res.header('Access-Control-Allow-Origin', '*');
@@ -30,6 +31,7 @@ app.use(bodyParser.json());
 app.use(morgan('dev'));
 
 app.use('/kitchen', kitchenRoute);
+app.use('/order', orderRoute);
 
 app.use((req, res, next)=>{
     const error = new Error('Not Found');
