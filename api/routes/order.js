@@ -1,8 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
-const Order = require('../models/orderSchema')
-const Menu = require('../models/foodMenu');
 const checkAuth = require('../middleware/user_Auth');
 const orderController = require('../controllers/order');
 
