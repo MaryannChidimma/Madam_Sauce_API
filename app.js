@@ -3,13 +3,13 @@ const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-//require('dotenv').config();
+require('dotenv').config();
 
-mongoose.connect('mongodb://localhost/Kitchen_DB',  { useNewUrlParser: true, useUnifiedTopology: true})
+mongoose.connect(process.env.MONGO_URL, {useNewUrlParser: true, useUnifiedTopology: true})
 .then(()=> console.log("logged to database"))
 .catch(err => console.error('could not connect to mongo db....', err))
 
-const kitchenRoute = require('./api/routes/kitchen');
+const menuRoute = require('./api/routes/menu');
 const orderRoute = require('./api/routes/order');
 const userRoute = require('./api/routes/user');
 
@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(morgan('dev'));
 
-app.use('/kitchen', kitchenRoute);
+app.use('/menu', menuRoute);
 app.use('/order', orderRoute);
 app.use('/user',  userRoute);
 

@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+require('dotenv').config()
 
 exports.user_signup = (req, res,next)=>{
     User.find({email: req.body.email})
@@ -24,7 +25,7 @@ exports.user_signup = (req, res,next)=>{
          user.save()
          .then(result =>{
         console.log(result)
-        res.status(201).json({message: 'user created sucessfully'});
+        res.status(201).json({message: 'user created sucessfully', user : result});
          })
          .catch(err=>{
              res.status(500).json({error:err})
@@ -49,13 +50,14 @@ exports.user_login =(req, res, next)=>{
          if(err){
             return res.status(401).json({message : "Authentication field"})   
          }
+
          if(result){
-             token = jwt.sign({
+                token = jwt.sign({
                 email: user[0].email, 
                 user_Id: user[0]._Id
                 },
                 
-               process.env.JWT_KEY,
+               process.env.JWT_KEY, 
              
                {expiresIn : '1h'}
              )

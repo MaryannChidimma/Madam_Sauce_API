@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router(); 
 const checkAuth = require('../middleware/user_Auth');
-const menuController = require('../controllers/kitchen');
+const menuController = require('../controllers/menu');
 
 router.post('/', checkAuth, menuController.menu_create_menu); 
 

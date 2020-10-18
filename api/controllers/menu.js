@@ -1,6 +1,5 @@
 const  mongoose = require('mongoose');
-const Menu = require('../models/foodMenu');
-
+const Menu = require('../models/menuSchema');
 
 exports.menu_get_all = (req, res, next)=>{
     Menu.find()
@@ -15,7 +14,7 @@ exports.menu_get_all = (req, res, next)=>{
          name: doc.name,
          price: doc.price,
          _id  : doc._id,
-         request :{type: 'GET', url: 'http://localhost:5000/kitchen/' + doc._id} 
+         request :{type: 'GET', url: 'http://localhost:5000/menu/' + doc._id} 
           }
       })
     }
@@ -37,7 +36,7 @@ exports.menu_get_menu = (req, res, next)=>{
             request:{
                 type : 'GET',
                 description: 'GET_ALL_MENU',
-                url : "http://localhost:5000/kitchen" 
+                url : "http://localhost:5000/menu" 
             }
         })
         })
@@ -57,7 +56,7 @@ exports.menu_create_menu = (req, res, next)=>{
        menu.save().then(result=>{
            console.log(result);
            res.status(201).json({
-               message: 'this handles post request in /product',
+               message: 'this handles post request in /menu',
                createdProperty: {
                    name: result.name,
                    price: result.price,
@@ -66,7 +65,7 @@ exports.menu_create_menu = (req, res, next)=>{
        
                    request :{
                        type :"GET",
-                       url:"http://localhost:5000/kitchen/" + result._id
+                       url:"http://localhost:5000/menu/" + result._id
                    }
        
                }
@@ -88,7 +87,7 @@ exports.menu_patch_menu = (req, res, next)=>{
         request:{
             type : 'GET',
             description: 'GET_ALL_MENU',
-            url : "http://localhost:5000/kitchen" 
+            url : "http://localhost:5000/menu" 
         }
     })
     })
@@ -107,7 +106,7 @@ exports.menu_delete_menu =()=>{
      message : "menu deleted",
      request: {
       type:"POST",
-      url : "http://localhost:5000/kitchen" ,
+      url : "http://localhost:5000/menu" ,
       body: {name: "String", price: "Number"}
      }
      })

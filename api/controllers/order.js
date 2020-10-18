@@ -1,5 +1,5 @@
 const Order = require('../models/orderSchema');
-const Menu = require('../models/foodMenu')
+const Menu = require('../models/menuSchema')
 const mongoose = require('mongoose');
 
 exports.orders_get_all = (req, res, next) =>{

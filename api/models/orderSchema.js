@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-//const kitchen_dbs = require('./foodMenu')
-
 
  const orderSchema = mongoose.Schema({
  _id : mongoose.Schema.Types.ObjectId,
