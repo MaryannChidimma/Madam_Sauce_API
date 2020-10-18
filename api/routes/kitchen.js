@@ -4,6 +4,7 @@ const  mongoose = require('mongoose');
 const router = express.Router(); 
 const Menu = require('../models/foodMenu');
 const multer = require('multer');
+ const checkAuth = require('../middleware/user_Auth');
 const storage = multer.diskStorage({
  destination: function(req, file, cb){
      cb(null, 'uploads/');
