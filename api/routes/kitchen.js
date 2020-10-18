@@ -3,24 +3,10 @@ const  mongoose = require('mongoose');
 //const { request } = require('../../app');
 const router = express.Router(); 
 const Menu = require('../models/foodMenu');
-const multer = require('multer');
- const checkAuth = require('../middleware/user_Auth');
-const storage = multer.diskStorage({
- destination: function(req, file, cb){
-     cb(null, 'uploads/');
-   },
-  filename: function(req, file, cb){
-     cb(null, new Date().toISOString() + file.originalname) ;
-  }
+//const multer = require('multer');
+const checkAuth = require('../middleware/user_Auth');
 
- });
- const fileFliter = (req, file, cb)=>{
-     cb(null, false)
-     cb(null, true)
- }
-const upload = multer({storage: storage, limits: {fileSize: 1024 * 1024 *5}});
-
-router.post('/', upload.single('menuImage'), (req, res)=>{
+router.post('/', checkAuth, (req, res, next)=>{
     console.log(req.file);
 const menu = new Menu({
  _id : mongoose.Types.ObjectId(),
@@ -103,7 +89,7 @@ res.status(500).json({error:err})
 })
 });
 
-router.patch('/:foodId', (req, res) =>{
+router.patch('/:foodId', checkAuth, (req, res) =>{
     const id = req.params.foodId;
     const updateOps = {};
     for(const ops of req.body){
@@ -125,7 +111,7 @@ router.patch('/:foodId', (req, res) =>{
     })
     });
 
-    router.delete('/:foodId', (req, res) =>{
+    router.delete('/:foodId', checkAuth, (req, res) =>{
         const id = req.params.foodId;
        Menu.remove({_id : id})
        .exec()

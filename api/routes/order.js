@@ -3,7 +3,10 @@ const router = express.Router();
 const mongoose = require('mongoose');
 const Order = require('../models/orderSchema')
 const Menu = require('../models/foodMenu')
-router.get('/', (req, res, next)=>{
+const checkAuth = require('../middleware/user_Auth');
+
+
+router.get('/', checkAuth, (req, res, next)=>{
     Order.find()
     .select("foodId quantity _id")
     .exec()
@@ -30,7 +33,7 @@ router.get('/', (req, res, next)=>{
 });
 
 
-router.post('/', (req, res, next)=>{
+router.post('/',checkAuth , (req, res, next)=>{
     Menu.findById(req.body.foodId)
     .then( food =>{
         if(!food){
@@ -68,7 +71,7 @@ router.post('/', (req, res, next)=>{
 
 
 
-router.get('/:orderId', (req, res, next)=>{
+router.get('/:orderId', checkAuth, (req, res, next)=>{
     const id = req.params.orderId;
 Order.findById(id)
 .exec()
@@ -90,7 +93,7 @@ res.status(200).json({
 res.status(500).json({error:err})
 })
 });   
-router.delete('/:orderId', (req, res, next)=>{
+router.delete('/:orderId', checkAuth, (req, res, next)=>{
     const id = req.params.orderId;
     Order.remove({_id : id})
     .exec()

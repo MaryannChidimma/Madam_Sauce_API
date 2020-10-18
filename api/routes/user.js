@@ -5,10 +5,10 @@ const router = express.Router();
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const user = require('../models/user');
+//const user = require('../models/user');
 
 router.post('/signup', (req, res, next)=>{
-    user.find({email: req.body.email})
+    User.find({email: req.body.email})
     .then(user =>{
         if(user.length >=1){
             return res.status(422).json({message :'email exists'})
@@ -44,10 +44,10 @@ router.post('/signup', (req, res, next)=>{
 });
 //check if a certain user is in the database, then creat a token 
 router.post('/login', (req, res, next)=>{
-    user.find({email: req.body.email})
+    User.find({email: req.body.email})
     .exec()
     .then(user =>{
-     if(!user.length >1){
+     if(user.length < 1){
          return res.status(401).json({message : "Authentication field"})
      }
      bcrypt.compare(req.body.password, user[0].password, (err, result) =>{
@@ -59,10 +59,12 @@ router.post('/login', (req, res, next)=>{
                 email: user[0].email, 
                 user_Id: user[0]._Id
                 },
-                process.env.JWT_KEY,
+                
+               process.env.JWT_KEY,
+             
                {expiresIn : '1h'}
              )
-            return res.status(200).json({message : "Authentication successful", tokens: token })  
+            return res.status(200).json({message : "Authentication successful", token: token })  
          }
          return res.status(401).json({message : "Authentication field"})
         })
@@ -75,7 +77,7 @@ router.post('/login', (req, res, next)=>{
 })
 
 router.delete('/:userId', (req, res, next)=>{
-   user.remove({_id: req.params.userId})
+   User.remove({_id: req.params.userId})
    .exec()
    .then(result =>{
        res.status(200).json({message :" user deleted  successfully"})
