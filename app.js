@@ -11,7 +11,7 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopol
 
 const menuRoute = require('./api/routes/menu');
 const orderRoute = require('./api/routes/order');
-const userRoute = require('./api/routes/user');
+const adminRoute = require('./api/routes/admin');
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -32,7 +32,7 @@ app.use(morgan('dev'));
 
 app.use('/menu', menuRoute);
 app.use('/order', orderRoute);
-app.use('/user', userRoute);
+app.use('/admin', adminRoute);
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');

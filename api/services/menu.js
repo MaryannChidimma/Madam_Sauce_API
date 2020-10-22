@@ -15,7 +15,6 @@ const getAllMenu = () => {
                             name: doc.name,
                             price: doc.price,
                             _id: doc._id,
-                            request: { type: 'GET', url: 'http://localhost:5000/menu/' + doc._id }
                         }
                     })
                 }
@@ -34,11 +33,7 @@ const getMenuById = (id) => {
                 console.log(doc)
                 const result = {
                     menu: doc,
-                    request: {
-                        type: 'GET',
-                        description: 'GET_ALL_MENU',
-                        url: "http://localhost:5000/menu"
-                    }
+
                 }
                 resolve(result)
             }).catch(err => {
@@ -51,7 +46,6 @@ const getMenuById = (id) => {
 
 const createMenu = (data) => {
     const { category, name, price, quantity } = data;
-    //console.log(data);
     return new Promise((resolve, reject) => {
         const menu = new Menu({
             _id: mongoose.Types.ObjectId(),
@@ -63,19 +57,11 @@ const createMenu = (data) => {
 
         menu.save()
             .then(result => {
-                console.log(result)
-                const createdProperty = {
+               const createdProperty = {
                     name: result.name,
                     price: result.price,
                     quantity: result.quantity,
                     _id: result._id,
-
-                    request: {
-                        type: "GET",
-                        url: "http://localhost:5000/menu/" + result._id
-                    }
-
-
                 }
                 resolve(createdProperty);
             }).catch(err => {
@@ -85,24 +71,33 @@ const createMenu = (data) => {
     })
 }
 
-const updateMenu = (id) => {
-    return new Promise((resolve, reject) => {
-        Menu.findById(id)
-            .exec()
-            .then(doc => {
-                const menu = {
-                    menu: doc,
-                    request: {
-                        type: 'GET',
-                        description: 'GET_ALL_MENU',
-                        url: "http://localhost:5000/menu"
-                    }
+const updateMenu = (id, data) => {
+    const { category, name, price, quantity } = data;
+   
+   return new Promise((resolve, reject)=>{
+     
+    Menu.updateOne({_id:id}, data)
+        .exec()
+        .then(doc => {
+            const response = await getMenuById(id) 
+             response = {...response}   
+            
+            
+          const response = {
+                menu: doc,
+                request: {
+                    type: 'GET',
+                    description: 'GET_ALL_MENU',
+                    url: "http://localhost:5000/menu"
                 }
-                resolve(menu);
-            }).catch(err => {
-                reject({ error: err })
-            })
-    })
+             }
+            
+            resolve(response)
+        }).catch(err => {
+         reject({ error: err })
+        })
+
+    });  
 }
 
 const deleteMenu = (id) => {
@@ -112,11 +107,6 @@ const deleteMenu = (id) => {
             .then(result => {
                 const response = {
                     message: "menu deleted",
-                    request: {
-                        type: "POST",
-                        url: "http://localhost:5000/menu",
-                        body: { name: "String", price: "Number" }
-                    }
                 }
                 resolve(response);
             }).catch(err => {

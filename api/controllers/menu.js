@@ -1,5 +1,4 @@
-const { response } = require('express')
-const menu = require('../services/menu')
+//const menu = require('../services/menu')
 const {
     getAllMenu,
     getMenuById,
@@ -41,9 +40,10 @@ const createMenuController = (req, res, next) => {
 
 const updateMenuController = (req, res, next) => {
     const id = req.params.foodId;
-    updateMenu(id).
-        then(response => {
-            res.status(201).json(response)
+    const data = req.body
+   updateMenu(id, data)
+        .then(response => {
+            res.status(200).json(response)
         })
         .catch(error => {
             res.status(500).json(error);

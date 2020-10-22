@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router(); 
-const checkAuth = require('../middleware/user_Auth');
+const checkAuth = require('../middleware/admin_Auth');
 const {
     getAllMenuController,
     getMenuByIdController, 
