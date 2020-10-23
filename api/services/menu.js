@@ -7,20 +7,9 @@ const getAllMenu = () => {
             .select("name price _id")
             .exec()
             .then(docs => {
-                console.log(docs);
-                const response = {
-                    count: docs.length,
-                    menus: docs.map(doc => {
-                        return {
-                            name: doc.name,
-                            price: doc.price,
-                            _id: doc._id,
-                        }
-                    })
-                }
-                resolve(response)
+                resolve(docs)
             }).catch(err => {
-                reject({ error: err })
+                reject(err)
             })
     })
 }
@@ -30,14 +19,9 @@ const getMenuById = (id) => {
         Menu.findById(id)
             .exec()
             .then(doc => {
-                console.log(doc)
-                const result = {
-                    menu: doc,
-
-                }
-                resolve(result)
+                resolve(doc)
             }).catch(err => {
-                reject({ error: err })
+                reject(err)
             })
 
     })
@@ -57,7 +41,7 @@ const createMenu = (data) => {
 
         menu.save()
             .then(result => {
-               const createdProperty = {
+                const createdProperty = {
                     name: result.name,
                     price: result.price,
                     quantity: result.quantity,
@@ -73,31 +57,27 @@ const createMenu = (data) => {
 
 const updateMenu = (id, data) => {
     const { category, name, price, quantity } = data;
-   
-   return new Promise((resolve, reject)=>{
-     
-    Menu.updateOne({_id:id}, data)
-        .exec()
-        .then(doc => {
-            const response = await getMenuById(id) 
-             response = {...response}   
-            
-            
-          const response = {
-                menu: doc,
-                request: {
-                    type: 'GET',
-                    description: 'GET_ALL_MENU',
-                    url: "http://localhost:5000/menu"
-                }
-             }
-            
-            resolve(response)
-        }).catch(err => {
-         reject({ error: err })
-        })
 
-    });  
+    return new Promise((resolve, reject) => {
+
+        Menu.findByIdAndUpdate(id, data, { new: true })
+            .exec()
+            .then(doc => {
+                const response = {
+                    menu: doc,
+                    request: {
+                        type: 'GET',
+                        description: 'GET_ALL_MENU',
+                        url: "http://localhost:5000/menu"
+                    }
+                }
+
+                resolve(response)
+            }).catch(err => {
+                reject({ error: err })
+            })
+
+    });
 }
 
 const deleteMenu = (id) => {

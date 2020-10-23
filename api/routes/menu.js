@@ -15,7 +15,7 @@ router.get('/', getAllMenuController)
 
 router.get('/:foodId', getMenuByIdController);
 
- router.patch('/:foodId', checkAuth, updateMenuController)
+ router.put('/:foodId', checkAuth, updateMenuController)
    
  router.delete('/:foodId', checkAuth,deleteMenuController)
      

@@ -1,7 +1,7 @@
 const Order = require('../models/orderSchema');
-const Menu = require('../models/menuSchema')
 const mongoose = require('mongoose');
 const { response } = require('express');
+const { getMenuById } = require('../services/menu')
 
 const getAllOrders = () => {
     return new Promise((resolve, reject) => {
@@ -29,35 +29,27 @@ const getAllOrders = () => {
     })
 }
 
-const createOrder = (id, data) => {
+const createOrder = (data) => {
     return new Promise((resolve, reject) => {
-        const { quantity, foodId } = data;
-        Menu.findById(id)
+        const { quantity, foodId, customerName } = data;
+        getMenuById(foodId)
             .then(food => {
-                
+                if (!food) {
+                    const err = new Error('food not found')
+                    err.satus = 400;
+                    return reject(err);
+                }
                 const order = new Order({
                     _id: mongoose.Types.ObjectId(),
+                    customerName:customerName,
                     quantity: quantity,
                     foodId: foodId
                 });
-                return order
-                    .save()
-                    .then(result => {
-                        const response = {
-                            message: 'order was created',
-                            createdProperty: {
-                                _id: result._id,
-                                foodId: result.foodId,
-                                quantity: result.quantity,
-                                request: {
-                                    type: "GET",
-                                    url: "http://localhost:5000/order/" + result._id
-                                }
-                            }
-                        }
-                        resolve(response);
+                order.save()
+                    .then(order => {
+                        resolve(order);
                     }).catch(err => {
-                        reject({ error: err })
+                        reject(err)
                     })
             })
 
@@ -69,24 +61,13 @@ const getOrderById = (id) => {
         Order.findById(id)
             .exec()
             .then(order => {
-                const response = {
-                    Order: order,
-                    request: {
-                        type: 'GET',
-                        description: 'GET_ALL_ORDER',
-                        url: "http://localhost:5000/order"
-                    }
-                }
-
-                resolve(response);
-
+                resolve(order);
             }).catch(err => {
-                reject({ error: err });
+                reject(err);
             });
     })
 
 }
-
 const deleteOrder = (id) => {
     return new Promise((resolve, reject) => {
         Order.remove({ _id: id })

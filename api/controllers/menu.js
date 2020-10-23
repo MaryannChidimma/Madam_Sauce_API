@@ -8,22 +8,31 @@ const {
 
 const getAllMenuController = (req, res, next) => {
     getAllMenu()
-        .then(response => {
+        .then(result => {
+            const response = {
+                count: result.length,
+                menus: result,
+                success: true
+            }
             res.status(200).json(response)
         })
-        .catch(error => {
-            res.status(500).json(error)
+        .catch(err => {
+            res.status(500).json({ error: err, success: false })
         })
 }
 
 const getMenuByIdController = (req, res, next) => {
     const id = req.params.foodId;
     getMenuById(id)
-        .then(response => {
+        .then(result => {
+            const response = {
+                menu: result,
+                success: true
+            }
             res.status(200).json(response)
         })
-        .catch(error => {
-            res.status(500).json(error)
+        .catch(err => {
+            res.status(500).json({ error: err, success: false })
         });
 }
 
@@ -41,7 +50,7 @@ const createMenuController = (req, res, next) => {
 const updateMenuController = (req, res, next) => {
     const id = req.params.foodId;
     const data = req.body
-   updateMenu(id, data)
+    updateMenu(id, data)
         .then(response => {
             res.status(200).json(response)
         })
