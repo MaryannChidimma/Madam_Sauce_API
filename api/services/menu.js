@@ -41,15 +41,9 @@ const createMenu = (data) => {
 
         menu.save()
             .then(result => {
-                const createdProperty = {
-                    name: result.name,
-                    price: result.price,
-                    quantity: result.quantity,
-                    _id: result._id,
-                }
-                resolve(createdProperty);
+                resolve(result);
             }).catch(err => {
-                reject({ error: err })
+                reject(err)
             })
 
     })
@@ -57,26 +51,14 @@ const createMenu = (data) => {
 
 const updateMenu = (id, data) => {
     const { category, name, price, quantity } = data;
-
     return new Promise((resolve, reject) => {
-
         Menu.findByIdAndUpdate(id, data, { new: true })
             .exec()
             .then(doc => {
-                const response = {
-                    menu: doc,
-                    request: {
-                        type: 'GET',
-                        description: 'GET_ALL_MENU',
-                        url: "http://localhost:5000/menu"
-                    }
-                }
-
-                resolve(response)
+                resolve(doc)
             }).catch(err => {
-                reject({ error: err })
+                reject(err)
             })
-
     });
 }
 
@@ -84,11 +66,8 @@ const deleteMenu = (id) => {
     return new Promise((resolve, reject) => {
         Menu.remove({ _id: id })
             .exec()
-            .then(result => {
-                const response = {
-                    message: "menu deleted",
-                }
-                resolve(response);
+            .then(doc => {
+                resolve(doc);
             }).catch(err => {
                 reject({ error: err })
             })

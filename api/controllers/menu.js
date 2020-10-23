@@ -1,4 +1,4 @@
-//const menu = require('../services/menu')
+
 const {
     getAllMenu,
     getMenuById,
@@ -38,12 +38,15 @@ const getMenuByIdController = (req, res, next) => {
 
 const createMenuController = (req, res, next) => {
     createMenu(req.body)
-        .then(response => {
-            console.log(response);
+        .then(result => {
+            const response = {
+                createdProperty: result,
+                success: true
+            }
             res.status(201).json(response)
         })
-        .catch(error => {
-            res.status(500).json(error);
+        .catch(err => {
+            res.status(500).json({ error: err, success: false });
         });
 }
 
@@ -51,28 +54,36 @@ const updateMenuController = (req, res, next) => {
     const id = req.params.foodId;
     const data = req.body
     updateMenu(id, data)
-        .then(response => {
+        .then(result => {
+            const response = {
+                menu: result,
+                success: true
+            }
             res.status(200).json(response)
         })
-        .catch(error => {
-            res.status(500).json(error);
+        .catch(err => {
+            res.status(500).json({ error: err, success: false });
         });
 }
 const deleteMenuController = (req, res, next) => {
     const id = req.params.foodId;
     deleteMenu(id)
-        .then(response => {
+        .then(result => {
+            const response = {
+                message: "menu deleted",
+                success: true
+            }
             res.status(200).json(response)
         })
         .catch(error => {
-            res.status(500).json(error);
+            res.status(500).json({ error: err, success: false });
         });
 
 }
 
 module.exports = {
-    getAllMenuController
-    , getMenuByIdController,
+    getAllMenuController,
+    getMenuByIdController,
     createMenuController,
     updateMenuController,
     deleteMenuController

@@ -1,12 +1,19 @@
+const { response } = require('express');
 const { getAllOrders, createOrder, getOrderById, deleteOrder } = require('../services/order');
 
 const getAllOrdersController = (req, res, next) => {
     getAllOrders()
-        .then(response => {
-            res.status(200).json(response)
+        .then(result => {
+            const response = {
+                count: result.length,
+                order : result,
+                success: true
+             }
+           
+       res.status(200).json(response)
         })
-        .catch(error => {
-            res.status(500).json(error)
+        .catch(err => {
+            res.status(500).json({error: err,  success: false })
         })
 }
 
@@ -21,7 +28,7 @@ const createOrderController = (req, res, next) => {
             res.status(201).json(response)
         })
         .catch(err => {
-            res.status(err.status || 500).json({error: err})
+            res.status(err.status || 500).json({error: err,  success: false })
         })
 }
 
@@ -34,7 +41,7 @@ const getOrderByIdController = (req, res, next) => {
     getOrderById(id)
         .then(result => {
             const response = {
-                Order: order,
+                Order: result,
                 success: true
             }
             res.status(200).json(response)
@@ -50,11 +57,15 @@ const getOrderByIdController = (req, res, next) => {
 const deleteOrderController = (req, res, next) => {
     const id = req.params.orderId;
     deleteOrder(id)
-        .then(response => {
-            res.status(201).json(response)
+        .then(result=> {
+          const response = {
+              message: "order was deleted",
+             success : true
+            }
+            res.status(200).json(response)
         })
-        .catch(error => {
-            res.status(500).json(error)
+        .catch(err=> {
+            res.status(500).json({error: err,  success: false })
         })
 
 }

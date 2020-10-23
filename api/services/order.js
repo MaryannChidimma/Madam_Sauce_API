@@ -1,30 +1,17 @@
 const Order = require('../models/orderSchema');
 const mongoose = require('mongoose');
-const { response } = require('express');
 const { getMenuById } = require('../services/menu')
 
 const getAllOrders = () => {
     return new Promise((resolve, reject) => {
         Order.find()
-            .select("foodId quantity _id")
+            .select("foodId quantity _id, customerName, createdAt")
             .exec()
-            .then(docs => {
-                const response = {
-                    count: docs.length,
-                    orders: docs.map(doc => {
-                        return {
-                            foodId: doc.foodId,
-                            _id: doc._id,
-                            quantity: doc.quantity,
-                            request: { type: 'GET', url: 'http://localhost:5000/order/' + doc._id }
-                        }
-                    })
-                }
-
-                resolve(response);
+            .then(order => {
+                resolve(order);
 
             }).catch(err => {
-                reject({ error: err })
+                reject(err)
             });
     })
 }
@@ -41,7 +28,7 @@ const createOrder = (data) => {
                 }
                 const order = new Order({
                     _id: mongoose.Types.ObjectId(),
-                    customerName:customerName,
+                    customerName: customerName,
                     quantity: quantity,
                     foodId: foodId
                 });
@@ -72,14 +59,10 @@ const deleteOrder = (id) => {
     return new Promise((resolve, reject) => {
         Order.remove({ _id: id })
             .exec()
-            .then(result => {
-
-                const response = {
-                    message: "order deleted"
-                }
-                resolve(response)
+            .then(order => {
+                resolve(order)
             }).catch(err => {
-                reject({ error: err })
+                reject(er)
             })
 
 

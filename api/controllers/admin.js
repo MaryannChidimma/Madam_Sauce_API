@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-exports.admin_signup = (req, res, next) => {
+const adminSignup = (req, res, next) => {
     Admin.find({ email: req.body.email })
         .then(admin => {
             if (admin.length >= 1) {
@@ -39,7 +39,7 @@ exports.admin_signup = (req, res, next) => {
 
 }
 
-exports.admin_login = (req, res, next) => {
+const adminLogin = (req, res, next) => {
     Admin.find({ email: req.body.email })
         .exec()
         .then(admin => {
@@ -73,7 +73,7 @@ exports.admin_login = (req, res, next) => {
 
 }
 
-exports.admin_delete_admin = (req, res, next) => {
+const deleteAdmin = (req, res, next) => {
     Admin.remove({ _id: req.params.adminId })
         .exec()
         .then(result => {
@@ -83,3 +83,5 @@ exports.admin_delete_admin = (req, res, next) => {
             res.status(500).json({ error: err });
         })
 }
+
+module.exports = {adminSignup, adminLogin, deleteAdmin};
