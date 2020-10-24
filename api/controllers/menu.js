@@ -1,123 +1,90 @@
-const mongoose = require('mongoose');
-const Menu = require('../models/menuSchema');
 
-exports.menu_get_all = (req, res, next) => {
-    Menu.find()
-        .select("name price _id")
-        .exec()
-        .then(docs => {
-            console.log(docs);
-            const response = {
-                count: docs.length,
-                menus: docs.map(doc => {
-                    return {
-                        name: doc.name,
-                        price: doc.price,
-                        _id: doc._id,
-                        request: { type: 'GET', url: 'http://localhost:5000/menu/' + doc._id }
-                    }
-                })
-            }
-            res.status(200).json({ response })
+const {
+    getAllMenu,
+    getMenuById,
+    createMenu,
+    updateMenu,
+    deleteMenu } = require('../services/menu')
 
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(201).json({ error: err })
-        })
-}
-
-exports.menu_get_menu = (req, res, next) => {
-    const id = req.params.foodId;
-    Menu.findById(id)
-        .exec()
-        .then(doc => {
-            console.log(doc)
-            res.status(200).json({
-                menu: doc,
-                request: {
-                    type: 'GET',
-                    description: 'GET_ALL_MENU',
-                    url: "http://localhost:5000/menu"
-                }
-            })
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({ error: err })
-        });
-}
-
-exports.menu_create_menu = (req, res, next) => {
-    const menu = new Menu({
-        _id: mongoose.Types.ObjectId(),
-        category: req.body.category,
-        name: req.body.name,
-        price: req.body.price,
-        quantity: req.body.quantity
-    });
-    menu.save().then(result => {
-        console.log(result);
-        res.status(201).json({
-            message: 'this handles post request in /menu',
-            createdProperty: {
-                name: result.name,
-                price: result.price,
-                quantity: result.quantity,
-                _id: result._id,
-
-                request: {
-                    type: "GET",
-                    url: "http://localhost:5000/menu/" + result._id
-                }
-
-            }
-        })
-    })
-        .catch(err => {
-            console.log(err);
-            res.status(500).json({ error: err });
-        });
-}
-
-exports.menu_patch_menu = (req, res, next) => {
-    const id = req.params.foodId;
-    Menu.findById(id)
-        .exec()
-        .then(doc => {
-            console.log(doc)
-            res.status(200).json({
-                menu: doc,
-                request: {
-                    type: 'GET',
-                    description: 'GET_ALL_MENU',
-                    url: "http://localhost:5000/menu"
-                }
-            })
-        })
-        .catch(err => {
-            console.log(err)
-            res.status(500).json({ error: err })
-        })
-}
-
-exports.menu_delete_menu = () => {
-    const id = req.params.foodId;
-    Menu.remove({ _id: id })
-        .exec()
+const getAllMenuController = (req, res, next) => {
+    getAllMenu()
         .then(result => {
-            console.log(result)
-            res.status(200).json({
-                message: "menu deleted",
-                request: {
-                    type: "POST",
-                    url: "http://localhost:5000/menu",
-                    body: { name: "String", price: "Number" }
-                }
-            })
+            const response = {
+                count: result.length,
+                menus: result,
+                success: true
+            }
+            res.status(200).json(response)
         })
         .catch(err => {
-            console.log(err)
-            res.status(500).json({ error: err })
+            res.status(500).json({ error: err, success: false })
+        })
+}
+
+const getMenuByIdController = (req, res, next) => {
+    const id = req.params.foodId;
+    getMenuById(id)
+        .then(result => {
+            const response = {
+                menu: result,
+                success: true
+            }
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err, success: false })
         });
 }
+
+const createMenuController = (req, res, next) => {
+    createMenu(req.body)
+        .then(result => {
+            const response = {
+                createdProperty: result,
+                success: true
+            }
+            res.status(201).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err, success: false });
+        });
+}
+
+const updateMenuController = (req, res, next) => {
+    const id = req.params.foodId;
+    const data = req.body
+    updateMenu(id, data)
+        .then(result => {
+            const response = {
+                menu: result,
+                success: true
+            }
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(500).json({ error: err, success: false });
+        });
+}
+const deleteMenuController = (req, res, next) => {
+    const id = req.params.foodId;
+    deleteMenu(id)
+        .then(result => {
+            const response = {
+                message: "menu deleted",
+                success: true
+            }
+            res.status(200).json(response)
+        })
+        .catch(error => {
+            res.status(500).json({ error: err, success: false });
+        });
+
+}
+
+module.exports = {
+    getAllMenuController,
+    getMenuByIdController,
+    createMenuController,
+    updateMenuController,
+    deleteMenuController
+};

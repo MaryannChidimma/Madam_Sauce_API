@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
-const User = require('../models/user');
+const Admin = require('../models/admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
-exports.user_signup = (req, res, next) => {
-    User.find({ email: req.body.email })
-        .then(user => {
-            if (user.length >= 1) {
+const adminSignup = (req, res, next) => {
+    Admin.find({ email: req.body.email })
+        .then(admin => {
+            if (admin.length >= 1) {
                 return res.status(422).json({ message: 'email exists' })
             }
             else {
@@ -17,15 +17,15 @@ exports.user_signup = (req, res, next) => {
 
                     } else {
 
-                        const user = new User({
+                        const admin = new Admin({
                             _id: mongoose.Types.ObjectId(),
                             email: req.body.email,
                             password: hash
                         })
-                        user.save()
+                        admin.save()
                             .then(result => {
                                 console.log(result)
-                                res.status(201).json({ message: 'user created sucessfully', user: result });
+                                res.status(201).json({ message: 'admin created sucessfully', admin: result });
                             })
                             .catch(err => {
                                 res.status(500).json({ error: err })
@@ -39,22 +39,22 @@ exports.user_signup = (req, res, next) => {
 
 }
 
-exports.user_login = (req, res, next) => {
-    User.find({ email: req.body.email })
+const adminLogin = (req, res, next) => {
+    Admin.find({ email: req.body.email })
         .exec()
-        .then(user => {
-            if (user.length < 1) {
+        .then(admin => {
+            if (admin.length < 1) {
                 return res.status(401).json({ message: "Authentication field" })
             }
-            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+            bcrypt.compare(req.body.password, admin[0].password, (err, result) => {
                 if (err) {
                     return res.status(401).json({ message: "Authentication field" })
                 }
 
                 if (result) {
                     token = jwt.sign({
-                        email: user[0].email,
-                        user_Id: user[0]._Id
+                        email: admin[0].email,
+                        admin_Id: admin[0]._Id
                     },
 
                         process.env.JWT_KEY,
@@ -73,13 +73,15 @@ exports.user_login = (req, res, next) => {
 
 }
 
-exports.user_delete_user = (req, res, next) => {
-    User.remove({ _id: req.params.userId })
+const deleteAdmin = (req, res, next) => {
+    Admin.remove({ _id: req.params.adminId })
         .exec()
         .then(result => {
-            res.status(200).json({ message: " user deleted  successfully" })
+            res.status(200).json({ message: " admin deleted  successfully" })
         })
         .catch(err => {
             res.status(500).json({ error: err });
         })
 }
+
+module.exports = {adminSignup, adminLogin, deleteAdmin};
