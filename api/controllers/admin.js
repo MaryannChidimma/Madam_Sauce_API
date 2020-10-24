@@ -8,12 +8,12 @@ const adminSignup = (req, res, next) => {
     Admin.find({ email: req.body.email })
         .then(admin => {
             if (admin.length >= 1) {
-                return res.status(422).json({ message: 'email exists' })
+                return res.status(422).json({ message: 'email exists', success: false })
             }
             else {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
-                        return res.status(500).json({ error: err });
+                        return res.status(500).json({ error: err , success: false});
 
                     } else {
 
@@ -24,11 +24,11 @@ const adminSignup = (req, res, next) => {
                         })
                         admin.save()
                             .then(result => {
-                                console.log(result)
-                                res.status(201).json({ message: 'admin created sucessfully', admin: result });
+                             
+                                res.status(201).json({ message: 'admin created sucessfully', admin: result, success: true  });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: err })
+                                res.status(500).json({ error: err , success:false})
                             });
 
                     }
