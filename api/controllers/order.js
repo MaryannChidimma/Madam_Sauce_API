@@ -13,7 +13,7 @@ const getAllOrdersController = (req, res, next) => {
             res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false })
+           next(err)
         })
 }
 
@@ -28,7 +28,7 @@ const createOrderController = (req, res, next) => {
             res.status(201).json(response)
         })
         .catch(err => {
-            res.status(err.status || 500).json({ error: err, success: false })
+           next(err)
         })
 }
 
@@ -43,7 +43,7 @@ const getOrderByIdController = (req, res, next) => {
             res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false })
+           next(err)
         })
 };
 
@@ -58,7 +58,7 @@ const deleteOrderController = (req, res, next) => {
             res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false })
+           next(err)
         })
 }
 

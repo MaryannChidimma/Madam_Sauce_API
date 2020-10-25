@@ -17,7 +17,7 @@ const getAllMenuController = (req, res, next) => {
             res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false })
+            next(err)
         })
 }
 
@@ -32,7 +32,7 @@ const getMenuByIdController = (req, res, next) => {
             res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false })
+            next(err)
         });
 }
 
@@ -46,7 +46,7 @@ const createMenuController = (req, res, next) => {
             res.status(201).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false });
+            next(err)
         });
 }
 
@@ -62,7 +62,7 @@ const updateMenuController = (req, res, next) => {
             res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({ error: err, success: false });
+            next(err)
         });
 }
 const deleteMenuController = (req, res, next) => {
@@ -75,8 +75,8 @@ const deleteMenuController = (req, res, next) => {
             }
             res.status(200).json(response)
         })
-        .catch(error => {
-            res.status(500).json({ error: err, success: false });
+        .catch(err=> {
+           next(err) 
         });
 
 }
