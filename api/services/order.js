@@ -23,7 +23,7 @@ const createOrder = (data) => {
             .then(food => {
                 if (!food) {
                     const err = new Error('food not found')
-                    err.satus = 400;
+                    err.satus = 404;
                     return reject(err);
                 }
                 const order = new Order({
