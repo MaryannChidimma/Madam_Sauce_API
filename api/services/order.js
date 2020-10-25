@@ -69,6 +69,4 @@ const deleteOrder = (id) => {
     })
 }
 
-
-
 module.exports = { getAllOrders, createOrder, getOrderById, deleteOrder };

@@ -13,7 +13,7 @@ const adminSignup = (req, res, next) => {
             else {
                 bcrypt.hash(req.body.password, 10, (err, hash) => {
                     if (err) {
-                        return res.status(500).json({ error: err , success: false});
+                        return res.status(500).json({ error: err, success: false });
 
                     } else {
 
@@ -24,11 +24,11 @@ const adminSignup = (req, res, next) => {
                         })
                         admin.save()
                             .then(result => {
-                             
-                                res.status(201).json({ message: 'admin created sucessfully', admin: result, success: true  });
+
+                                res.status(201).json({ message: 'admin created sucessfully', admin: result, success: true });
                             })
                             .catch(err => {
-                                res.status(500).json({ error: err , success:false})
+                                res.status(500).json({ error: err, success: false })
                             });
 
                     }
@@ -48,7 +48,7 @@ const adminLogin = (req, res, next) => {
             }
             bcrypt.compare(req.body.password, admin[0].password, (err, result) => {
                 if (err) {
-                    return res.status(401).json({ message: "Authentication failed", success: false})
+                    return res.status(401).json({ message: "Authentication failed", success: false })
                 }
 
                 if (result) {
@@ -61,9 +61,9 @@ const adminLogin = (req, res, next) => {
 
                         { expiresIn: '1h' }
                     )
-                    return res.status(200).json({ message: "Authentication successful", token: token , success: true})
+                    return res.status(200).json({ message: "Authentication successful", token: token, success: true })
                 }
-                return res.status(401).json({ message: "Authentication failed", success:false})
+                return res.status(401).json({ message: "Authentication failed", success: false })
             })
 
         })
@@ -84,4 +84,4 @@ const deleteAdmin = (req, res, next) => {
         })
 }
 
-module.exports = {adminSignup, adminLogin, deleteAdmin};
+module.exports = { adminSignup, adminLogin, deleteAdmin };
