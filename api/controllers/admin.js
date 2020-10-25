@@ -4,7 +4,8 @@ const adminSignup = (req, res, next) => {
     signup(req.body)
         .then(result => {
             const response = {
-                data: result,
+                admin: result.admin,
+                token:result.token,
                 success: true
             }
             res.status(201).json(response);

@@ -24,8 +24,9 @@ const signup = (data) => {
                             password: hash
                         })
                         admin.save()
-                            .then(result => {
-                                return resolve(result);
+                            .then(admin => {
+                                const token = generateJwtToken(admin.email, admin._Id)
+                                return resolve({admin: admin, token: token});
                             })
                             .catch(err => {
                                 return reject(err);
