@@ -9,7 +9,6 @@ const getAllOrdersController = (req, res, next) => {
                 order: result,
                 success: true
             }
-
             res.status(200).json(response)
         })
         .catch(err => {
