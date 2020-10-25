@@ -6,14 +6,14 @@ const getAllOrdersController = (req, res, next) => {
         .then(result => {
             const response = {
                 count: result.length,
-                order : result,
+                order: result,
                 success: true
-             }
-           
-       res.status(200).json(response)
+            }
+
+            res.status(200).json(response)
         })
         .catch(err => {
-            res.status(500).json({error: err,  success: false })
+            res.status(500).json({ error: err, success: false })
         })
 }
 
@@ -28,13 +28,9 @@ const createOrderController = (req, res, next) => {
             res.status(201).json(response)
         })
         .catch(err => {
-            res.status(err.status || 500).json({error: err,  success: false })
+            res.status(err.status || 500).json({ error: err, success: false })
         })
 }
-
-
-
-
 
 const getOrderByIdController = (req, res, next) => {
     const id = req.params.orderId;
@@ -51,23 +47,19 @@ const getOrderByIdController = (req, res, next) => {
         })
 };
 
-
-
-
 const deleteOrderController = (req, res, next) => {
     const id = req.params.orderId;
     deleteOrder(id)
-        .then(result=> {
-          const response = {
-              message: "order was deleted",
-             success : true
+        .then(result => {
+            const response = {
+                message: "order was deleted",
+                success: true
             }
             res.status(200).json(response)
         })
-        .catch(err=> {
-            res.status(500).json({error: err,  success: false })
+        .catch(err => {
+            res.status(500).json({ error: err, success: false })
         })
-
 }
 
 module.exports = { getAllOrdersController, createOrderController, getOrderByIdController, deleteOrderController };
