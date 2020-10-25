@@ -62,7 +62,7 @@ const deleteOrder = (id) => {
             .then(order => {
                 resolve(order)
             }).catch(err => {
-                reject(er)
+                reject(err)
             })
 
 

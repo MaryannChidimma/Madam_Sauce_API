@@ -44,11 +44,11 @@ const adminLogin = (req, res, next) => {
         .exec()
         .then(admin => {
             if (admin.length < 1) {
-                return res.status(401).json({ message: "Authentication field" })
+                return res.status(401).json({ message: "Authentication failed", success: false })
             }
             bcrypt.compare(req.body.password, admin[0].password, (err, result) => {
                 if (err) {
-                    return res.status(401).json({ message: "Authentication field" })
+                    return res.status(401).json({ message: "Authentication failed", success: false})
                 }
 
                 if (result) {
@@ -61,14 +61,14 @@ const adminLogin = (req, res, next) => {
 
                         { expiresIn: '1h' }
                     )
-                    return res.status(200).json({ message: "Authentication successful", token: token })
+                    return res.status(200).json({ message: "Authentication successful", token: token , success: true})
                 }
-                return res.status(401).json({ message: "Authentication field" })
+                return res.status(401).json({ message: "Authentication failed", success:false})
             })
 
         })
         .catch(err => {
-            res.status(500).json({ error: err });
+            res.status(500).json({ error: err, success: false });
         })
 
 }
@@ -77,10 +77,10 @@ const deleteAdmin = (req, res, next) => {
     Admin.remove({ _id: req.params.adminId })
         .exec()
         .then(result => {
-            res.status(200).json({ message: " admin deleted  successfully" })
+            res.status(200).json({ message: " admin deleted  successfully", success: true })
         })
         .catch(err => {
-            res.status(500).json({ error: err });
+            res.status(500).json({ error: err, success: false });
         })
 }
 
