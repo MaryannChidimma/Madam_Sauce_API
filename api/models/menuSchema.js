@@ -7,7 +7,7 @@ const menuSchema = mongoose.Schema({
     price: { type: Number, required: true },
     quantity: Number
 },
-    { timestamps: true }
+    { timestamps: true}
 );
 
 

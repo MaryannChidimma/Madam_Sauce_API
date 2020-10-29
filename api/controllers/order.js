@@ -1,4 +1,4 @@
-const { response } = require('express');
+
 const { getAllOrders, createOrder, getOrderById, deleteOrder } = require('../services/order');
 
 const getAllOrdersController = (req, res, next) => {
