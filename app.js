@@ -34,7 +34,10 @@ app.use(morgan('dev'));
 app.use('/menu', menuRoute);
 app.use('/order', orderRoute);
 app.use('/admin', adminRoute);
-
+app.get('/',(req,res,next)=>{
+    res.status(200).json({server:'server is life'})
+    
+})
 app.use((req, res, next) => {
     const error = new Error('Not Found');
     error.status = 404;
