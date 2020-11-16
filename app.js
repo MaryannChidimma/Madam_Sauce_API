@@ -34,6 +34,7 @@ app.use(morgan('dev'));
 app.use('/menu', menuRoute);
 app.use('/order', orderRoute);
 app.use('/admin', adminRoute);
+
 app.get('/',(req,res,next)=>{
     res.status(200).json({server:'server is life'})
     
